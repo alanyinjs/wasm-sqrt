@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script>
+    fetch('./test.wasm')
+      .then(res => {
+        if (res.ok)
+          return res.arrayBuffer();
+        throw new Error('Unable to fetch WASM.');
+      })
+      .then(bytes => {
+        return WebAssembly.compile(bytes);
+      })
+      .then(module => {
+        return WebAssembly.instantiate(module);
+      })
+      .then(instance => {
+        window.wasmSqrt = instance.exports.sqrt;
+      })
+      .catch(e => {
+        alert( `An error occurred: ${e.message}.`);
+      });
+  </script>
+  <title>WASM Demo</title>
+</head>
+<body>
+  
+</body>
+</html>
